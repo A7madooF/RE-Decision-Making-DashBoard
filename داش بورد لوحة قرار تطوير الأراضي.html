@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة قرار تطوير الأراضي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1524;
+  --panel:#101f33;
+  --panel-2:#16293f;
+  --line:#1e3450;
+  --ink:#e8eef6;
+  --ink-dim:#8fa3bb;
+  --ink-faint:#63788f;
+  --gold:#e3b23c;
+  --gold-soft:#f0cd77;
+  --steel:#4d7fb3;
+  --green:#4bb98a;
+  --red:#d9646b;
+  --radius:14px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  font-weight:400;line-height:1.5;
+  background-image:radial-gradient(1200px 500px at 70% -10%,rgba(227,178,60,.07),transparent 60%);
+}
+.wrap{max-width:1500px;margin:0 auto;padding:18px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  background:linear-gradient(180deg,#13253c,#0e1d30);
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 18px;margin-bottom:14px;
+}
+.brand{display:flex;align-items:center;gap:10px;margin-inline-end:auto}
+.mark{width:30px;height:30px;flex:none}
+.brand h1{font-size:17px;font-weight:600;margin:0;letter-spacing:-.2px}
+.brand span{color:var(--ink-faint);font-size:12.5px;font-weight:400}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{
+  appearance:none;border:1px solid var(--line);background:#132339;color:var(--ink-dim);
+  font-family:inherit;font-size:13.5px;font-weight:500;padding:8px 15px;border-radius:10px;cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.tab:hover{color:var(--ink);border-color:#2b4a6d}
+.tab[aria-selected="true"]{background:var(--gold);color:#17202c;border-color:var(--gold);font-weight:600}
+.tab:focus-visible,.pill input:focus-visible,input[type=range]:focus-visible,.reset:focus-visible{outline:2px solid var(--gold-soft);outline-offset:2px}
+.reset{
+  appearance:none;border:1px solid var(--line);background:transparent;color:var(--ink-dim);
+  font-family:inherit;font-size:12.5px;padding:8px 13px;border-radius:10px;cursor:pointer;
+}
+.reset:hover{color:var(--ink);border-color:#2b4a6d}
+
+/* ---------- kpi strip ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:0}
+.kpi .lab{color:var(--ink-faint);font-size:12px;margin-bottom:2px}
+.kpi .val{font-size:22px;font-weight:600;letter-spacing:-.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi .val small{font-size:12px;font-weight:400;color:var(--ink-dim);margin-inline-start:4px}
+
+/* ---------- layout ---------- */
+.grid{display:grid;grid-template-columns:1fr 340px;gap:14px;align-items:start}
+.stage{display:flex;flex-direction:column;gap:14px;min-width:0}
+
+/* ---------- paths ---------- */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.path{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+.path.win{border-color:rgba(227,178,60,.55);background:linear-gradient(180deg,#16283e,#101f33);box-shadow:0 0 0 1px rgba(227,178,60,.12) inset}
+.path-head{display:flex;align-items:center;gap:9px;margin-bottom:2px;flex-wrap:wrap}
+.chip{font-size:11.5px;padding:3px 9px;border-radius:7px;background:#20364f;color:#b9cde3;font-weight:500}
+.chip.gold{background:var(--gold);color:#17202c;font-weight:600}
+.badge{font-size:11px;padding:3px 9px;border-radius:7px;border:1px solid rgba(227,178,60,.5);color:var(--gold-soft);margin-inline-start:auto}
+.path h2{font-size:19px;margin:0;font-weight:600}
+.path .sub{color:var(--ink-faint);font-size:12.5px;margin:4px 0 14px}
+.hero-lab{color:var(--ink-dim);font-size:13px}
+.hero{font-size:46px;font-weight:700;letter-spacing:-2px;line-height:1.1;margin:0}
+.hero small{font-size:14px;font-weight:400;color:var(--ink-dim);letter-spacing:0;margin-inline-start:6px}
+.path.win .hero{color:var(--gold)}
+.rows{margin-top:16px;border-top:1px solid var(--line)}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:9px 0;border-bottom:1px solid rgba(30,52,80,.6)}
+.row:last-child{border-bottom:0}
+.row .r-lab{color:var(--ink-dim);font-size:13px}
+.row .r-val{font-size:16px;font-weight:600;white-space:nowrap}
+.row .r-val small{font-size:11.5px;font-weight:400;color:var(--ink-faint);margin-inline-start:4px}
+.row.em .r-val{font-size:19px}
+.row.em .r-lab{color:var(--ink)}
+
+/* ---------- generic card ---------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.card h3{margin:0 0 4px;font-size:15px;font-weight:600}
+.card .note{color:var(--ink-faint);font-size:12.5px;margin:0 0 14px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:0 26px}
+@media (max-width:640px){.split{grid-template-columns:1fr}}
+
+/* ---------- waterfall ---------- */
+.bar-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:baseline;margin-bottom:10px}
+.bar-row .b-lab{font-size:13px;color:var(--ink-dim)}
+.bar-row .b-val{font-size:14px;font-weight:600}
+.track{grid-column:1/-1;height:7px;border-radius:4px;background:#17293e;overflow:hidden}
+.track i{display:block;height:100%;border-radius:4px;background:var(--steel);transition:width .25s ease}
+.track i.gold{background:var(--gold)}
+.track i.green{background:var(--green)}
+.track i.red{background:var(--red)}
+
+/* ---------- table ---------- */
+.tbl-wrap{overflow-x:auto;margin:0 -4px}
+table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:560px}
+th,td{padding:7px 10px;text-align:start;white-space:nowrap}
+thead th{color:var(--ink-faint);font-weight:500;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel)}
+tbody tr:nth-child(even){background:rgba(22,41,63,.45)}
+tbody td.neg{color:var(--red)}
+tbody td.pos{color:var(--green)}
+tbody tr.dim{color:var(--ink-faint)}
+
+/* ---------- assumptions panel ---------- */
+.side{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto}
+.side h3{margin:0;font-size:14px;font-weight:600;color:var(--gold)}
+.side .hint{color:var(--ink-faint);font-size:11.5px;margin:3px 0 14px;line-height:1.55}
+.group{color:var(--gold-soft);font-size:12px;font-weight:600;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px dashed #2a436a}
+.group:first-of-type{margin-top:0}
+.ctrl{margin-bottom:14px}
+.ctrl-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.ctrl-lab{font-size:12.5px;color:var(--ink-dim);line-height:1.35;flex:1}
+.ctrl-lab u{display:block;color:var(--ink-faint);font-size:10.5px;text-decoration:none}
+.pill{background:#0b1726;border:1px solid #27405f;border-radius:9px;padding:3px 8px;flex:none}
+.pill input{
+  width:74px;background:transparent;border:0;color:var(--ink);font-family:inherit;
+  font-size:14px;font-weight:600;text-align:center;padding:2px 0;-moz-appearance:textfield;
+}
+.pill input::-webkit-outer-spin-button,.pill input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:3px;
+  background:#22384f;outline:none;margin:0;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);
+  border:2px solid #0a1524;cursor:pointer;
+}
+input[type=range]::-moz-range-thumb{
+  width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid #0a1524;cursor:pointer;
+}
+
+/* ---------- insight ---------- */
+.insight{
+  background:linear-gradient(90deg,rgba(227,178,60,.09),transparent 70%);
+  border:1px solid var(--line);border-inline-start:3px solid var(--gold);
+  border-radius:12px;padding:14px 18px;font-size:14px;line-height:1.8;
+}
+.insight b{color:var(--gold-soft);font-weight:600}
+.insight .g{color:var(--green)}
+.insight .r{color:var(--red)}
+.foot{color:var(--ink-faint);font-size:11.5px;line-height:1.85;padding:4px 2px 20px}
+
+@media (max-width:1040px){
+  .grid{grid-template-columns:1fr}
+  .side{position:static;max-height:none;order:-1}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:700px){
+  .wrap{padding:12px}
+  .paths{grid-template-columns:1fr}
+  .hero{font-size:38px}
+  .brand h1{font-size:15px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M2 7l10-5 10 5-10 5L2 7z" fill="#e3b23c"/>
+        <path d="M2 12l10 5 10-5" stroke="#4d7fb3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 17l10 5 10-5" stroke="#2b4a6d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>لوحة قرار تطوير الأراضي</h1>
+        <span id="subtitle">نموذج تفاعلي مبني على ملف الحاسبات</span>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <button class="reset" id="reset" type="button">إعادة الافتراضات</button>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid">
+    <div class="stage" id="stage"></div>
+    <aside class="side">
+      <h3>الافتراضات</h3>
+      <p class="hint">حرّك أي رقم أو اكتبه مباشرة، وتتحدث كل النتائج في اللحظة نفسها.</p>
+      <div id="controls"></div>
+    </aside>
+  </div>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+"use strict";
+
+/* ====================== أدوات التنسيق ====================== */
+const nf = (v,d=0)=>(isFinite(v)?v:0).toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+function money(v){
+  if(!isFinite(v)) return "—";
+  const a=Math.abs(v);
+  if(a>=1e9) return {n:nf(v/1e9,2),u:"مليار ريال"};
+  if(a>=1e6) return {n:nf(v/1e6,2),u:"مليون ريال"};
+  if(a>=1e3) return {n:nf(v/1e3,1),u:"ألف ريال"};
+  return {n:nf(v,0),u:"ريال"};
+}
+const M = v => { const m=money(v); return m.n+" <small>"+m.u+"</small>"; };
+const pct = (v,d=1)=> (isFinite(v)?nf(v*100,d):"—")+"%";
+const esc = s => String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+/* ====================== رياضيات مالية ====================== */
+function npv(rate,flows){ return flows.reduce((s,f,t)=> s+f/Math.pow(1+rate,t),0); }
+function irr(flows){
+  const has = flows.some(f=>f>0) && flows.some(f=>f<0);
+  if(!has) return NaN;
+  let lo=-0.9499, hi=10;
+  let flo=npv(lo,flows), fhi=npv(hi,flows);
+  if(flo*fhi>0) return NaN;
+  for(let i=0;i<200;i++){
+    const mid=(lo+hi)/2, fm=npv(mid,flows);
+    if(flo*fm<=0){hi=mid;fhi=fm;} else {lo=mid;flo=fm;}
+  }
+  return (lo+hi)/2;
+}
+
+/* ====================== تعريف الحاسبات ====================== */
+const MODELS = {
+
+/* ---------- 1) تكلفة الأرض والعائد التطويري ---------- */
+land:{
+  name:"تكلفة الأرض والعائد",
+  subtitle:"قطعة قائمة تُشترى وتُطوَّر — مقارنة بين التشغيل التأجيري والبيع بعد التطوير",
+  note:"المصدر: ورقة «تكلفة الأرض والعائد». افتراض الملف: المشتري يتحمّل ضريبة التصرفات والسعي عند الشراء، والبائع يتحمّلهما عند البيع.",
+  groups:[
+    {t:"الأرض والرسوم",k:["area","ppsm","taxBuy","commBuy"]},
+    {t:"التطوير",k:["bua","devCost"]},
+    {t:"مسار التأجير",k:["rent"]},
+    {t:"مسار البيع",k:["sell","taxSell","commSell"]}
+  ],
+  inputs:{
+    area:{l:"مساحة الأرض",u:"م²",v:3750,min:500,max:50000,step:50},
+    ppsm:{l:"سعر شراء المتر",u:"ريال/م²",v:1450,min:200,max:6000,step:10},
+    taxBuy:{l:"ضريبة التصرفات عند الشراء",u:"%",v:5,min:0,max:10,step:0.5,p:1},
+    commBuy:{l:"عمولة السعي عند الشراء",u:"%",v:2.5,min:0,max:5,step:0.25,p:1},
+    bua:{l:"مسطح البناء",u:"م²",v:2500,min:0,max:30000,step:50},
+    devCost:{l:"تكلفة المتر التطويري",u:"ريال/م²",v:1800,min:400,max:6000,step:50},
+    rent:{l:"سعر المتر التأجيري",u:"ريال/م²/سنة",v:400,min:50,max:2500,step:10},
+    sell:{l:"سعر المتر البيعي",u:"ريال/م²",v:5000,min:500,max:20000,step:100},
+    taxSell:{l:"ضريبة التصرفات عند البيع",u:"%",v:5,min:0,max:10,step:0.5,p:1},
+    commSell:{l:"عمولة السعي عند البيع",u:"%",v:2.5,min:0,max:5,step:0.25,p:1}
+  },
+  calc(i){
+    const landPrice = i.area*i.ppsm;
+    const taxB = landPrice*i.taxBuy, commB = landPrice*i.commBuy;
+    const landTotal = landPrice+taxB+commB;
+    const dev = i.bua*i.devCost;
+    const invest = landTotal+dev;
+    const annualRent = i.bua*i.rent;
+    const yieldPct = invest? annualRent/invest : 0;
+    const paybackRent = annualRent? invest/annualRent : Infinity;
+    const gross = i.bua*i.sell;
+    const taxS = gross*i.taxSell, commS = gross*i.commSell;
+    const netSale = gross-taxS-commS;
+    const profit = netSale-invest;
+    const margin = invest? profit/invest : 0;
+    const beSell = i.bua*(1-i.taxSell-i.commSell) ? invest/(i.bua*(1-i.taxSell-i.commSell)) : 0;
+    return {landPrice,taxB,commB,landTotal,dev,invest,annualRent,yieldPct,paybackRent,
+            gross,taxS,commS,netSale,profit,margin,beSell,ratio:i.bua/i.area};
+  },
+  kpis:r=>[
+    {l:"إجمالي تكلفة الأرض شاملة الرسوم",v:M(r.landTotal)},
+    {l:"إجمالي تكلفة التطوير",v:M(r.dev)},
+    {l:"إجمالي الاستثمار",v:M(r.invest)},
+    {l:"نسبة مسطح البناء إلى الأرض",v:pct(r.ratio,0)}
+  ],
+  stage(r,i){
+    const saleBetter = r.margin > r.yieldPct*5;  // مقارنة إرشادية على أفق 5 سنوات
+    return `
+    <div class="paths">
+      ${pathCard({
+        win:!saleBetter, chip:"المسار الأول", chipGold:!saleBetter,
+        title:"تشغيل تأجيري", sub:"الاحتفاظ بالعقار وتأجير المسطح سنويًا",
+        heroLab:"الدخل التأجيري السنوي", hero:M(r.annualRent),
+        badge:!saleBetter?"الأنسب على المدى الطويل":"",
+        rows:[
+          ["إجمالي الاستثمار",M(r.invest)],
+          ["الدخل السنوي للمتر",nf(i.rent)+" <small>ريال/م²</small>"],
+          ["العائد التأجيري السنوي",pct(r.yieldPct,2),true],
+          ["سنوات استرداد رأس المال",(isFinite(r.paybackRent)?nf(r.paybackRent,1):"—")+" <small>سنة</small>"],
+          ["الدخل التراكمي خلال 10 سنوات",M(r.annualRent*10)]
+        ]})}
+      ${pathCard({
+        win:saleBetter, chip:"المسار الثاني", chipGold:saleBetter,
+        title:"بيع بعد التطوير", sub:"إفراغ الصالات وبيعها بعد اكتمال التطوير",
+        heroLab:"صافي الربح من البيع", hero:M(r.profit),
+        badge:saleBetter?"الأعلى ربحًا":"",
+        rows:[
+          ["إجمالي إيرادات البيع",M(r.gross)],
+          ["ضريبة التصرفات + السعي",M(r.taxS+r.commS)],
+          ["صافي الإيرادات بعد الرسوم",M(r.netSale)],
+          ["هامش الربح على الاستثمار",pct(r.margin,1),true],
+          ["سعر التعادل للمتر",nf(r.beSell)+" <small>ريال/م²</small>"]
+        ]})}
+    </div>
+    <div class="card">
+      <h3>تفكيك التكلفة</h3>
+      <p class="note">كل بند كنسبة من إجمالي الاستثمار البالغ ${money(r.invest).n} ${money(r.invest).u}.</p>
+      <div class="split">
+        ${bar("ثمن الأرض قبل الرسوم",r.landPrice,r.invest,"gold")}
+        ${bar("ضريبة التصرفات عند الشراء",r.taxB,r.invest,"")}
+        ${bar("عمولة السعي عند الشراء",r.commB,r.invest,"")}
+        ${bar("تكلفة التطوير",r.dev,r.invest,"")}
+      </div>
+    </div>`;
+  },
+  insight(r,i){
+    const yrs = r.profit>0 && r.annualRent>0 ? r.profit/r.annualRent : Infinity;
+    if(r.profit<=0){
+      return `البيع عند <b>${nf(i.sell)} ريال/م²</b> يحقّق <span class="r">خسارة ${money(Math.abs(r.profit)).n} ${money(Math.abs(r.profit)).u}</span>؛
+      سعر التعادل هو <b>${nf(r.beSell)} ريال/م²</b>. التشغيل التأجيري بعائد <b>${pct(r.yieldPct,2)}</b> سنويًا هو المسار العملي الوحيد بهذه الأسعار.`;
+    }
+    return `البيع يحقّق <b>${money(r.profit).n} ${money(r.profit).u}</b> دفعة واحدة بهامش <b>${pct(r.margin,1)}</b>،
+    وهو ما يعادل دخل التأجير خلال <b>${isFinite(yrs)?nf(yrs,1):"—"} سنة</b>.
+    التأجير يعطي <b>${pct(r.yieldPct,2)}</b> سنويًا ويسترد رأس المال في <b>${isFinite(r.paybackRent)?nf(r.paybackRent,1):"—"} سنة</b> مع بقاء الأصل في ملكيتك.
+    رجّح البيع إذا كان لديك استخدام بديل لرأس المال يفوق <b>${pct(r.yieldPct,1)}</b> سنويًا.`;
+  }
+},
+
+/* ---------- 2) تطوير وتفريز ---------- */
+subdiv:{
+  name:"تطوير وتفريز",
+  subtitle:"شراء أرض خام وتطويرها وبيعها قطعًا مفرزة",
+  note:"المصدر: ورقة «تطوير وتفريز». البنية التحتية تُحسب على كامل المساحة الخام، والبيع على الصافي بعد الاقتطاعات.",
+  groups:[
+    {t:"الشراء",k:["rawArea","buyP","taxBuy","commBuy"]},
+    {t:"الاقتطاعات الحكومية",k:["roadCut","servCut"]},
+    {t:"تكاليف التطوير",k:["infra","permits","consult","conting"]},
+    {t:"البيع",k:["plotSize","sellP","taxSell","commSell"]}
+  ],
+  inputs:{
+    rawArea:{l:"مساحة الأرض الخام",u:"م²",v:50000,min:2000,max:600000,step:1000},
+    buyP:{l:"سعر شراء المتر الخام",u:"ريال/م²",v:300,min:20,max:3000,step:10},
+    taxBuy:{l:"ضريبة التصرفات عند الشراء",u:"%",v:5,min:0,max:10,step:0.5,p:1},
+    commBuy:{l:"عمولة السعي عند الشراء",u:"%",v:2.5,min:0,max:5,step:0.25,p:1},
+    roadCut:{l:"اقتطاع الطرق والمرافق",u:"%",v:25,min:0,max:45,step:1,p:1},
+    servCut:{l:"اقتطاع الخدمات",u:"مساجد وحدائق ومدارس",v:10,min:0,max:25,step:1,p:1},
+    infra:{l:"تكلفة البنية التحتية للمتر",u:"ريال/م² خام",v:150,min:20,max:900,step:10},
+    permits:{l:"رسوم الرخص والتصاريح",u:"ريال مقطوع",v:200000,min:0,max:3000000,step:10000},
+    consult:{l:"الاستشارات الهندسية والمساحية",u:"ريال مقطوع",v:150000,min:0,max:3000000,step:10000},
+    conting:{l:"احتياطي الطوارئ",u:"% من تكاليف التطوير",v:10,min:0,max:30,step:1,p:1},
+    plotSize:{l:"متوسط مساحة القطعة",u:"م²",v:500,min:150,max:2500,step:25},
+    sellP:{l:"سعر بيع المتر المفرز",u:"ريال/م²",v:1200,min:100,max:8000,step:25},
+    taxSell:{l:"ضريبة التصرفات عند البيع",u:"%",v:5,min:0,max:10,step:0.5,p:1},
+    commSell:{l:"عمولة التسويق عند البيع",u:"%",v:2.5,min:0,max:8,step:0.25,p:1}
+  },
+  calc(i){
+    const purchase=i.rawArea*i.buyP;
+    const taxB=purchase*i.taxBuy, commB=purchase*i.commBuy;
+    const buyTotal=purchase+taxB+commB;
+    const cut=i.roadCut+i.servCut;
+    const net=i.rawArea*(1-cut);
+    const infra=i.rawArea*i.infra;
+    const cont=(infra+i.permits+i.consult)*i.conting;
+    const dev=infra+i.permits+i.consult+cont;
+    const plots=i.plotSize? Math.floor(net/i.plotSize):0;
+    const gross=net*i.sellP;
+    const taxS=gross*i.taxSell, commS=gross*i.commSell;
+    const netRev=gross-taxS-commS;
+    const cost=buyTotal+dev;
+    const profit=netRev-cost;
+    const margin=cost? profit/cost:0;
+    const denom=net*(1-i.taxSell-i.commSell);
+    const beSell= denom? cost/denom:0;
+    const costPerNet = net? cost/net:0;
+    const profitPerPlot = plots? profit/plots:0;
+    return {purchase,taxB,commB,buyTotal,cut,net,infra,cont,dev,plots,gross,taxS,commS,netRev,cost,profit,margin,beSell,costPerNet,profitPerPlot};
+  },
+  kpis:r=>[
+    {l:"صافي المساحة القابلة للبيع",v:nf(r.net)+" <small>م²</small>"},
+    {l:"عدد القطع الناتجة",v:nf(r.plots)+" <small>قطعة</small>"},
+    {l:"إجمالي تكلفة المشروع",v:M(r.cost)},
+    {l:"تكلفة المتر القابل للبيع",v:nf(r.costPerNet)+" <small>ريال/م²</small>"}
+  ],
+  stage(r,i){
+    return `
+    <div class="paths">
+      ${pathCard({
+        win:r.profit>0, chip:"النتيجة", chipGold:r.profit>0,
+        title:"بيع القطع مفرزة", sub:"إفراغ القطع وبيعها بعد اكتمال التفريز والبنية التحتية",
+        heroLab:"صافي الربح", hero:M(r.profit),
+        badge:r.profit>0?"هامش "+pct(r.margin,1):"دون التعادل",
+        rows:[
+          ["إجمالي إيرادات البيع",M(r.gross)],
+          ["ضريبة التصرفات + التسويق",M(r.taxS+r.commS)],
+          ["صافي الإيرادات بعد الرسوم",M(r.netRev)],
+          ["إجمالي تكلفة المشروع",M(r.cost)],
+          ["العائد على الاستثمار",pct(r.margin,1),true]
+        ]})}
+      ${pathCard({
+        win:false, chip:"لكل قطعة", chipGold:false,
+        title:"اقتصاديات القطعة الواحدة", sub:"بمتوسط مساحة "+nf(i.plotSize)+" م² للقطعة",
+        heroLab:"صافي الربح لكل قطعة", hero:M(r.profitPerPlot),
+        badge:"",
+        rows:[
+          ["سعر بيع القطعة",M(i.plotSize*i.sellP)],
+          ["تكلفة القطعة",M(r.costPerNet*i.plotSize)],
+          ["سعر التعادل للمتر",nf(r.beSell)+" <small>ريال/م²</small>"],
+          ["الفرق بين سعر البيع والتعادل",nf(i.sellP-r.beSell)+" <small>ريال/م²</small>",true],
+          ["نسبة الاقتطاع الإجمالية",pct(r.cut,0)]
+        ]})}
+    </div>
+    <div class="card">
+      <h3>من الأرض الخام إلى صافي الربح</h3>
+      <p class="note">كل بند مقيسًا على إجمالي إيرادات البيع قبل الرسوم.</p>
+      <div class="split">
+        ${bar("ثمن الشراء شاملًا الرسوم",r.buyTotal,r.gross,"")}
+        ${bar("البنية التحتية",r.infra,r.gross,"")}
+        ${bar("رخص واستشارات واحتياطي",i.permits+i.consult+r.cont,r.gross,"")}
+        ${bar("ضريبة وعمولة البيع",r.taxS+r.commS,r.gross,"red")}
+        ${bar("صافي الربح",Math.max(r.profit,0),r.gross,"green")}
+        ${bar("إجمالي الإيرادات",r.gross,r.gross,"gold")}
+      </div>
+    </div>`;
+  },
+  insight(r,i){
+    if(r.profit<=0){
+      return `المشروع <span class="r">دون التعادل</span> عند سعر بيع <b>${nf(i.sellP)} ريال/م²</b>؛
+      يلزم <b>${nf(r.beSell)} ريال/م²</b> على الأقل لتغطية التكلفة، أي بفارق <b>${nf(r.beSell-i.sellP)} ريال</b> على كل متر.`;
+    }
+    return `المشروع يحقّق <b>${money(r.profit).n} ${money(r.profit).u}</b> بعائد <b>${pct(r.margin,1)}</b> على تكلفة قدرها ${money(r.cost).n} ${money(r.cost).u}.
+    سعر التعادل <b>${nf(r.beSell)} ريال/م²</b>، أي أن لديك هامش أمان قدره <b>${pct((i.sellP-r.beSell)/i.sellP,0)}</b> في سعر البيع قبل الوصول إلى الصفر.
+    الاقتطاع البالغ <b>${pct(r.cut,0)}</b> يرفع تكلفة المتر القابل للبيع إلى <b>${nf(r.costPerNet)} ريال</b>.`;
+  }
+},
+
+/* ---------- 3) التأجير من المالك (Ground Lease) ---------- */
+ground:{
+  name:"التأجير من المالك",
+  subtitle:"استئجار الأرض من مالكها وتطويرها وتشغيلها تأجيريًا طوال مدة العقد",
+  note:"المصدر: ورقة «التأجير من المالك». بانتهاء العقد تتوقف التدفقات لأن الأرض ومنشآتها تعود عادة للمالك (Reversion).",
+  groups:[
+    {t:"العقد والاستثمار الأولي",k:["years","baseRent","rentEsc","docFees","bua","devCost"]},
+    {t:"الدخل والتشغيل",k:["rentY1","rentGrow","occ","opex"]},
+    {t:"التقييم",k:["disc"]}
+  ],
+  inputs:{
+    years:{l:"مدة عقد إيجار الأرض",u:"سنة",v:15,min:3,max:30,step:1},
+    baseRent:{l:"إيجار الأرض السنوي — سنة 1",u:"ريال",v:300000,min:0,max:5000000,step:10000},
+    rentEsc:{l:"الزيادة السنوية في إيجار الأرض",u:"%",v:5,min:0,max:15,step:0.5,p:1},
+    docFees:{l:"رسوم توثيق العقد",u:"ريال مقطوع",v:15000,min:0,max:200000,step:1000},
+    bua:{l:"مسطح البناء المخطط",u:"م²",v:2500,min:200,max:30000,step:50},
+    devCost:{l:"تكلفة المتر التطويري",u:"ريال/م²",v:1800,min:400,max:6000,step:50},
+    rentY1:{l:"سعر المتر التأجيري — سنة 1",u:"ريال/م²/سنة",v:400,min:50,max:2500,step:10},
+    rentGrow:{l:"الزيادة السنوية في سعر التأجير",u:"%",v:3,min:0,max:12,step:0.5,p:1},
+    occ:{l:"نسبة الإشغال المتوقعة",u:"%",v:90,min:30,max:100,step:1,p:1},
+    opex:{l:"تكاليف التشغيل والصيانة",u:"% من الدخل الفعلي",v:10,min:0,max:45,step:1,p:1},
+    disc:{l:"معدل الخصم",u:"العائد المطلوب / تكلفة الفرصة",v:8,min:0,max:25,step:0.5,p:1}
+  },
+  calc(i){
+    const dev=i.bua*i.devCost;
+    const initial=dev+i.docFees;
+    const N=Math.max(25,Math.round(i.years));
+    const rows=[]; const flows=[-initial];
+    let cum=-initial, pvCum=-initial;
+    rows.push({y:0,ground:0,gross:0,eff:0,opex:0,net:0,flow:-initial,cum:-initial,pv:-initial,pvCum:-initial});
+    for(let t=1;t<=N;t++){
+      const on = t<=i.years;
+      const ground = on ? i.baseRent*Math.pow(1+i.rentEsc,t-1) : 0;
+      const gross  = on ? i.bua*i.rentY1*Math.pow(1+i.rentGrow,t-1) : 0;
+      const eff = gross*i.occ;
+      const ope = eff*i.opex;
+      const net = eff-ope-ground;
+      cum += net;
+      const pv = net/Math.pow(1+i.disc,t);
+      pvCum += pv;
+      flows.push(net);
+      rows.push({y:t,ground,gross,eff,opex:ope,net,flow:net,cum,pv,pvCum,on});
+    }
+    const totalNet=rows.reduce((s,r)=>s+(r.y?r.net:0),0);
+    const profit=cum;
+    const roi= initial? profit/initial:0;
+    const avg= i.years? roi/i.years:0;
+    const npvV=pvCum;
+    const irrV=irr(flows);
+    let payback=0; rows.forEach(r=>{ if(r.cum<0) payback++; });
+    const y1Yield = initial? (rows[1].eff-rows[1].ground)/initial : 0;
+    return {dev,initial,rows,totalNet,profit,roi,avg,npv:npvV,irr:irrV,payback,y1Yield,N};
+  },
+  kpis:r=>[
+    {l:"إجمالي الاستثمار الأولي",v:M(r.initial)},
+    {l:"صافي الربح خلال المدة",v:M(r.profit)},
+    {l:"معدل العائد الداخلي IRR",v:(isFinite(r.irr)?pct(r.irr,1):"—")},
+    {l:"سنة الاسترداد التقريبية",v:"السنة "+nf(r.payback)}
+  ],
+  stage(r,i){
+    const good = isFinite(r.irr) && r.irr>i.disc;
+    return `
+    <div class="paths">
+      ${pathCard({
+        win:good, chip:"الجدوى", chipGold:good,
+        title:"تشغيل الأرض المستأجرة", sub:"على مدى "+nf(i.years)+" سنة من عقد الإيجار",
+        heroLab:"صافي الربح الإجمالي بعد خصم الاستثمار", hero:M(r.profit),
+        badge: good?"يفوق معدل الخصم":"دون معدل الخصم",
+        rows:[
+          ["إجمالي صافي التدفقات التشغيلية",M(r.totalNet)],
+          ["إجمالي العائد على الاستثمار",pct(r.roi,1)],
+          ["متوسط العائد السنوي البسيط",pct(r.avg,2),true],
+          ["صافي القيمة الحالية NPV",M(r.npv)],
+          ["العائد التشغيلي في السنة الأولى",pct(r.y1Yield,2)]
+        ]})}
+      ${pathCard({
+        win:false, chip:"المخاطرة", chipGold:false,
+        title:"حساسية العقد", sub:"ما الذي يقرر نجاح الصفقة",
+        heroLab:"معدل العائد الداخلي", hero:(isFinite(r.irr)?pct(r.irr,1):"—")+' <small>مقابل معدل خصم '+pct(i.disc,1)+'</small>',
+        badge:"",
+        rows:[
+          ["إيجار الأرض في السنة الأولى",M(i.baseRent)],
+          ["إيجار الأرض في السنة الأخيرة",M(i.baseRent*Math.pow(1+i.rentEsc,Math.max(i.years-1,0)))],
+          ["نمو إيجار الأرض مقابل نمو الدخل",pct(i.rentEsc,1)+" <small>مقابل</small> "+pct(i.rentGrow,1),true],
+          ["الدخل الفعلي في السنة الأولى",M(r.rows[1].eff)],
+          ["عدد سنوات التدفق السالب",nf(r.payback)+" <small>سنة</small>"]
+        ]})}
+    </div>
+    <div class="card">
+      <h3>التدفق النقدي التراكمي</h3>
+      <p class="note">الخط الذهبي هو التدفق التراكمي الاسمي، والأزرق هو التراكمي المخصوم عند ${pct(i.disc,1)}. نقطة تقاطع الصفر هي استرداد رأس المال.</p>
+      ${chart(r.rows)}
+    </div>
+    <div class="card">
+      <h3>جدول التدفقات السنوية</h3>
+      <p class="note">تتوقف التدفقات تلقائيًا بعد السنة ${nf(i.years)} بانتهاء العقد.</p>
+      <div class="tbl-wrap"><table>
+        <thead><tr>
+          <th>السنة</th><th>إيجار الأرض</th><th>الدخل الإجمالي</th><th>بعد الإشغال</th>
+          <th>تشغيل وصيانة</th><th>صافي التدفق</th><th>التراكمي</th><th>التراكمي المخصوم</th>
+        </tr></thead>
+        <tbody>${r.rows.map(x=>`<tr class="${x.y>i.years?'dim':''}">
+          <td>${x.y}</td><td>${nf(x.ground)}</td><td>${nf(x.gross)}</td><td>${nf(x.eff)}</td>
+          <td>${nf(x.opex)}</td><td>${nf(x.net)}</td>
+          <td class="${x.cum<0?'neg':'pos'}">${nf(x.cum)}</td>
+          <td class="${x.pvCum<0?'neg':'pos'}">${nf(x.pvCum)}</td>
+        </tr>`).join("")}</tbody>
+      </table></div>
+    </div>`;
+  },
+  insight(r,i){
+    const spread=i.rentGrow-i.rentEsc;
+    const base = isFinite(r.irr)
+      ? (r.irr>i.disc
+         ? `العائد الداخلي <b>${pct(r.irr,1)}</b> يتجاوز معدل الخصم <b>${pct(i.disc,1)}</b>، وصافي القيمة الحالية <span class="g">${money(r.npv).n} ${money(r.npv).u}</span> — الصفقة مجدية بهذه الشروط.`
+         : `العائد الداخلي <b>${pct(r.irr,1)}</b> أقل من معدل الخصم <b>${pct(i.disc,1)}</b>، وصافي القيمة الحالية <span class="r">${money(r.npv).n} ${money(r.npv).u}</span> — الصفقة لا تعوّض تكلفة الفرصة البديلة.`)
+      : `التدفقات لا تكفي لحساب عائد داخلي؛ راجع إيجار الأرض ومستوى الدخل.`;
+    const warn = spread<0
+      ? ` إيجار الأرض ينمو بـ<b>${pct(i.rentEsc,1)}</b> بينما دخلك ينمو بـ<b>${pct(i.rentGrow,1)}</b> فقط، وهذا الفارق <span class="r">يقضم هامشك كل سنة</span>؛ التفاوض على تثبيت الزيادة أو ربطها بالتضخم هو أهم بند في العقد.`
+      : ` دخلك ينمو أسرع من إيجار الأرض بفارق <b>${pct(spread,1)}</b> سنويًا، وهو ما يوسّع الهامش مع تقدّم العقد.`;
+    return base+warn+` استرداد رأس المال يقع في <b>السنة ${nf(r.payback)}</b> من أصل ${nf(i.years)} سنة.`;
+  }
+}
+};
+
+/* ====================== مكوّنات العرض ====================== */
+function pathCard(o){
+  return `<div class="path ${o.win?'win':''}">
+    <div class="path-head">
+      <span class="chip ${o.chipGold?'gold':''}">${o.chip}</span>
+      <h2>${o.title}</h2>
+      ${o.badge?`<span class="badge">${o.badge}</span>`:""}
+    </div>
+    <p class="sub">${o.sub}</p>
+    <div class="hero-lab">${o.heroLab}</div>
+    <p class="hero">${o.hero}</p>
+    <div class="rows">${o.rows.map(r=>`<div class="row ${r[2]?'em':''}">
+      <span class="r-lab">${r[0]}</span><span class="r-val">${r[1]}</span></div>`).join("")}</div>
+  </div>`;
+}
+function bar(lab,val,total,cls){
+  const w = total? Math.min(Math.abs(val)/Math.abs(total)*100,100):0;
+  return `<div class="bar-row">
+    <span class="b-lab">${lab}</span>
+    <span class="b-val">${money(val).n} <small style="font-size:11px;color:var(--ink-faint)">${money(val).u} · ${nf(w,0)}%</small></span>
+    <span class="track"><i class="${cls}" style="width:${w}%"></i></span>
+  </div>`;
+}
+function chart(rows){
+  const W=760,H=240,pl=54,pr=14,pt=14,pb=26;
+  const xs=rows.map(r=>r.y), maxY=Math.max(...xs);
+  const vals=rows.flatMap(r=>[r.cum,r.pvCum]);
+  let lo=Math.min(...vals,0), hi=Math.max(...vals,0);
+  if(hi===lo){hi=lo+1;}
+  const pad=(hi-lo)*0.08; lo-=pad; hi+=pad;
+  const X=y=>pl+(W-pl-pr)*(y/Math.max(maxY,1));
+  const Y=v=>pt+(H-pt-pb)*(1-(v-lo)/(hi-lo));
+  const line=(key,color)=>`<polyline fill="none" stroke="${color}" stroke-width="2.2" stroke-linejoin="round"
+      points="${rows.map(r=>X(r.y).toFixed(1)+","+Y(r[key]).toFixed(1)).join(" ")}"/>`;
+  const zero=Y(0);
+  const ticks=[lo,(lo+hi)/2,hi].map(v=>`
+    <text x="${pl-8}" y="${Y(v)+4}" fill="#63788f" font-size="10" text-anchor="end">${nf(v/1e6,1)}م</text>
+    <line x1="${pl}" y1="${Y(v)}" x2="${W-pr}" y2="${Y(v)}" stroke="#1e3450" stroke-width="1"/>`).join("");
+  const xlab=rows.filter(r=>r.y%5===0).map(r=>`<text x="${X(r.y)}" y="${H-8}" fill="#63788f" font-size="10" text-anchor="middle">${r.y}</text>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img"
+      aria-label="التدفق النقدي التراكمي عبر سنوات العقد">
+    ${ticks}
+    <line x1="${pl}" y1="${zero}" x2="${W-pr}" y2="${zero}" stroke="#e3b23c" stroke-width="1" stroke-dasharray="4 4" opacity=".55"/>
+    ${line("pvCum","#4d7fb3")}
+    ${line("cum","#e3b23c")}
+    ${xlab}
+  </svg>`;
+}
+
+/* ====================== المحرّك ====================== */
+let current="land";
+const state={};
+Object.keys(MODELS).forEach(k=>{
+  state[k]={};
+  Object.entries(MODELS[k].inputs).forEach(([id,cfg])=>state[k][id]=cfg.v);
+});
+
+const $ = s => document.querySelector(s);
+
+function raw(modelKey){
+  const m=MODELS[modelKey], out={};
+  Object.entries(m.inputs).forEach(([id,cfg])=>{
+    out[id]= cfg.p ? state[modelKey][id]/100 : state[modelKey][id];
+  });
+  return out;
+}
+
+function buildTabs(){
+  $("#tabs").innerHTML = Object.entries(MODELS).map(([k,m])=>
+    `<button class="tab" role="tab" data-k="${k}" aria-selected="${k===current}">${m.name}</button>`).join("");
+  $("#tabs").querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+    current=b.dataset.k; buildTabs(); buildControls(); render();
+  }));
+}
+
+function buildControls(){
+  const m=MODELS[current];
+  $("#controls").innerHTML = m.groups.map(g=>
+    `<div class="group">${g.t}</div>` + g.k.map(id=>{
+      const c=m.inputs[id], v=state[current][id];
+      return `<div class="ctrl">
+        <div class="ctrl-top">
+          <label class="ctrl-lab" for="n_${id}">${c.l}<u>${c.u}</u></label>
+          <span class="pill"><input id="n_${id}" type="number" data-id="${id}" data-kind="num"
+            value="${v}" step="${c.step}" min="${c.min}" max="${c.max}"></span>
+        </div>
+        <input type="range" data-id="${id}" data-kind="range" aria-label="${esc(c.l)}"
+          min="${c.min}" max="${c.max}" step="${c.step}" value="${v}">
+      </div>`;
+    }).join("")
+  ).join("");
+
+}
+
+function wireControls(){
+  $("#controls").addEventListener("input",e=>{
+    const id=e.target.dataset.id; if(!id) return;
+    const c=MODELS[current].inputs[id];
+    let v=parseFloat(e.target.value);
+    if(!isFinite(v)) return;
+    if(e.target.dataset.kind==="num"){ v=Math.min(Math.max(v,c.min),c.max); }
+    state[current][id]=v;
+    const box=e.target.closest(".ctrl");
+    box.querySelector('[data-kind="num"]').value=v;
+    box.querySelector('[data-kind="range"]').value=v;
+    render();
+  });
+}
+
+function render(){
+  const m=MODELS[current], i=raw(current), r=m.calc(i);
+  $("#subtitle").textContent=m.subtitle;
+  $("#kpis").innerHTML = m.kpis(r).map(k=>
+    `<div class="kpi"><div class="lab">${k.l}</div><div class="val">${k.v}</div></div>`).join("");
+  $("#stage").innerHTML = m.stage(r,i) + `<div class="insight">${m.insight(r,i)}</div>`;
+  $("#foot").textContent = m.note+" جميع القيم افتراضات قابلة للتعديل وليست تقديرًا سوقيًا؛ استبدلها ببيانات المخطط المعتمد ودراسة السوق قبل أي قرار.";
+}
+
+$("#reset").addEventListener("click",()=>{
+  Object.entries(MODELS[current].inputs).forEach(([id,cfg])=>state[current][id]=cfg.v);
+  buildControls(); render();
+});
+
+buildTabs(); buildControls(); wireControls(); render();
+</script>
+</body>
+</html>
