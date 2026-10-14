@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -160,7 +161,27 @@ input[type=range]::-moz-range-thumb{
 .insight b{color:var(--gold-soft);font-weight:600}
 .insight .g{color:var(--green)}
 .insight .r{color:var(--red)}
-.foot{color:var(--ink-faint);font-size:11.5px;line-height:1.85;padding:4px 2px 20px}
+.foot{color:var(--ink-faint);font-size:11.5px;line-height:1.85;padding:4px 2px 16px}
+
+.signature{
+  display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;
+  margin:0;padding:16px 12px calc(26px + env(safe-area-inset-bottom,0px));
+  border-top:1px solid rgba(30,52,80,.75);
+  color:var(--ink-faint);font-size:12px;letter-spacing:.2px;text-align:center;
+}
+.signature .heart{
+  display:inline-block;font-size:12.5px;line-height:1;
+  animation:beat 1.9s ease-in-out infinite;transform-origin:center;
+}
+.signature .by{color:var(--ink-dim);font-weight:600;letter-spacing:.4px}
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  12%{transform:scale(1.22)}
+  24%{transform:scale(1)}
+  36%{transform:scale(1.12)}
+  48%{transform:scale(1)}
+}
+@media (prefers-reduced-motion:reduce){.signature .heart{animation:none}}
 
 @media (max-width:1040px){
   .grid{grid-template-columns:1fr}
@@ -207,6 +228,13 @@ input[type=range]::-moz-range-thumb{
   </div>
 
   <p class="foot" id="foot"></p>
+
+  <p class="signature">
+    <span>صنع بـ</span>
+    <span class="heart" aria-label="حب" role="img">🤍</span>
+    <span>بواسطة</span>
+    <span class="by" dir="ltr">A7madooF</span>
+  </p>
 </div>
 
 <script>
@@ -703,3 +731,5 @@ buildTabs(); buildControls(); wireControls(); render();
 </script>
 </body>
 </html>
+
+</body></html>
